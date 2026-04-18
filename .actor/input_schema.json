@@ -1,0 +1,28 @@
+{
+    "title": "Instagram Scraper Configuration",
+    "description": "Scrape Instagram accounts by keywords and location.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "keyword": {
+            "title": "Keyword",
+            "type": "string",
+            "description": "The main keyword to search for (e.g., 'cafe', 'giftshop').",
+            "editor": "textfield"
+        },
+        "location": {
+            "title": "Location",
+            "type": "string",
+            "description": "Optional location to append to the keyword (e.g., 'London', 'New York').",
+            "editor": "textfield"
+        },
+        "maxAccounts": {
+            "title": "Max Accounts",
+            "type": "integer",
+            "description": "Max accounts to collect per search (Optional). Set to 0 for unlimited.",
+            "editor": "number",
+            "default": 100
+        }
+    },
+    "required": ["keyword"]
+}

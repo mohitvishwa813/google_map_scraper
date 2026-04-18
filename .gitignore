@@ -1,0 +1,11 @@
+node_modules/
+storage/
+output/
+cookies.json
+*.png
+.env
+
+# Added by Apify CLI
+storage
+node_modules
+.venv
