@@ -26,14 +26,14 @@ const { keyword, location, maxResults } = await getInputs();
 async function findEmailOnWebsite(url) {
     if (!url || url === 'N/A' || !url.startsWith('http')) return 'N/A';
     try {
-        const response = await axios.get(url, { 
-            timeout: 6000, 
+        const response = await axios.get(url, {
+            timeout: 6000,
             headers: { 'User-Agent': 'Mozilla/5.0' }
         });
         const html = response.data;
         const matches = html.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi);
         return matches ? [...new Set(matches.map(e => e.toLowerCase()))].join(', ') : 'N/A';
-    } catch (e) {}
+    } catch (e) { }
     return 'N/A';
 }
 
@@ -41,7 +41,7 @@ let scrapedCount = 0;
 
 const crawler = new PlaywrightCrawler({
     maxConcurrency: 5,
-    requestHandlerTimeoutSecs: 90,
+    requestHandlerTimeoutSecs: 92,
     launchContext: {
         launchOptions: {
             headless: true,
@@ -59,7 +59,7 @@ const crawler = new PlaywrightCrawler({
 
                 const detail = await page.evaluate(() => {
                     const get = (s) => document.querySelector(s)?.innerText?.trim() || 'N/A';
-                    
+
                     // --- SUPER ROBUST PHONE EXTRACTION ---
                     let phone = 'N/A';
                     const phoneEl = document.querySelector('button[data-item-id^="phone:tel"], a[data-item-id^="phone:tel"], button[aria-label*="Phone"], button[data-tooltip*="phone"]');
@@ -89,7 +89,7 @@ const crawler = new PlaywrightCrawler({
                 });
 
                 detail.email = await findEmailOnWebsite(detail.website);
-                
+
                 await Dataset.pushData(detail);
                 scrapedCount++;
                 log.info(`[${scrapedCount}] ✅ Scraped: ${detail.name} | Phone: ${detail.phone}`);
@@ -100,9 +100,9 @@ const crawler = new PlaywrightCrawler({
         } else {
             log.info(`Searching: ${request.url}`);
             await page.goto(request.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-            
+
             const feedSelector = 'div[role="feed"]';
-            try { await page.waitForSelector(feedSelector, { timeout: 15000 }); } catch (e) {}
+            try { await page.waitForSelector(feedSelector, { timeout: 15000 }); } catch (e) { }
 
             for (let i = 0; i < 3; i++) {
                 await page.evaluate((sel) => {
@@ -112,10 +112,10 @@ const crawler = new PlaywrightCrawler({
                 await page.waitForTimeout(1000);
             }
 
-            const links = await page.evaluate(() => 
+            const links = await page.evaluate(() =>
                 Array.from(document.querySelectorAll('a[href*="/maps/place/"]')).map(a => a.href)
             );
-            
+
             const uniqueLinks = [...new Set(links)].slice(0, 15);
             await crawler.addRequests(uniqueLinks.map(url => ({ url, label: 'DETAIL' })));
         }
