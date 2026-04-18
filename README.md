@@ -56,22 +56,21 @@ const keyword = 'dentist';
 
 ## Deployment (Render.com)
 
-If you are deploying to Render and see the "Failed to launch browser" error, follow these steps:
+Render's standard environment doesn't allow `sudo`, which Playwright needs to install dependencies. To fix this, I have added a **Dockerfile**.
 
-1. **Build Command**: Set this in your Render dashboard:
-   ```bash
-   npm run build
-   ```
-2. **Start Command**:
-   ```bash
-   npm run serve
-   ```
-3. **Environment Variables**:
-   - `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` = `0`
-   - `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` = `true` (if applicable)
+### Steps to Deploy:
 
-> [!TIP]
-> On Render's "Web Service" settings, ensure your **Build Command** includes the playwright installation as added in `package.json`.
+1.  **Push Changes**: Ensure the `Dockerfile` and updated `package.json` are pushed to your GitHub.
+2.  **Change Service Type**: In your Render Dashboard, you might need to recreate the service as a **Web Service** using **Docker** as the runtime.
+3.  **Settings**:
+    - **Runtime**: `Docker`
+    - **Build Command**: (Empty/None - Docker handles it)
+    - **Start Command**: (Empty/None - Docker handles it)
+4.  **Environment Variables**:
+    - `PORT` = `3000`
+
+> [!IMPORTANT]
+> Using Docker is the most reliable way to run scrapers on Render because it includes all the necessary Linux libraries for Chromium to run headless.
 
 ## How it works
 1. **Search**: Navigates to the Google Maps search URL.
