@@ -54,6 +54,25 @@ Open `main.js` and change the `keyword` variable to your desired search term (e.
 const keyword = 'dentist'; 
 ```
 
+## Deployment (Render.com)
+
+If you are deploying to Render and see the "Failed to launch browser" error, follow these steps:
+
+1. **Build Command**: Set this in your Render dashboard:
+   ```bash
+   npm run build
+   ```
+2. **Start Command**:
+   ```bash
+   npm run serve
+   ```
+3. **Environment Variables**:
+   - `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD` = `0`
+   - `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD` = `true` (if applicable)
+
+> [!TIP]
+> On Render's "Web Service" settings, ensure your **Build Command** includes the playwright installation as added in `package.json`.
+
 ## How it works
 1. **Search**: Navigates to the Google Maps search URL.
 2. **Scroll**: Finds the results feed and scrolls until the end of the list is reached.

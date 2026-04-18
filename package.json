@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node main.js",
     "serve": "node server.js",
-    "tunnel": "lt --port 3000"
+    "tunnel": "lt --port 3000",
+    "build": "npm install && npx playwright install --with-deps chromium"
   },
   "keywords": [],
   "author": "",
